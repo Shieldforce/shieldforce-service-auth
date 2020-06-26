@@ -3,12 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Models\Permission;
-use App\Models\PermissionRole;
 use App\Models\Role;
 use App\Response\Error;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Gate;
 
@@ -66,7 +64,7 @@ class ACLPermissions
             $model = $request->model::find($request->route()->parameter("id"));
             if($model==null)
             {
-                return Error::generic("Item informado não existe", null, 403, 2001, $request);
+                return Error::generic(null, messageErrors(4001));
             }
         }
     }
@@ -85,7 +83,7 @@ class ACLPermissions
             env("APP_DEBUG")==false
         )
         {
-            return Error::generic("Não Autorizado", $request->route()->getName(), 301, 1001, $request);
+            return Error::generic(null, messageErrors(5004));
         }
     }
 

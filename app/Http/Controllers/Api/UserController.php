@@ -36,19 +36,19 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return bool|\Illuminate\Http\RedirectResponse|void
      */
     public function index()
     {
         $users = $this->model::paginate(10);
-        return Success::generic("Lista de Usuários", $users, 200);
+        return Success::generic($users, messageSuccess(20004, "Usuário"));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return bool|\Illuminate\Http\RedirectResponse|void
      */
     public function store()
     {
@@ -57,39 +57,42 @@ class UserController extends Controller
             $this->request['password'] = Hash::make($this->request['password']);
         }
         $action = $this->model->create($this->request->all());
-        return Success::generic("Usuário Criado com sucesso", $action, 200);
+        return Success::generic($action, messageSuccess(20000, "Usuário"));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return bool|\Illuminate\Http\RedirectResponse|void
      */
     public function show($id)
     {
         $users = $this->model::find($id);
-        return Success::generic("Lista de Usuários", $users, 200);
+        return Success::generic($users, messageSuccess(20003, "Usuário"));
     }
 
-
+    /**
+     * @param $id
+     * @return bool|\Illuminate\Http\RedirectResponse|void
+     */
     public function update($id)
     {
         $model = $this->model::find($id);
         $this->model::scopeUpdatePassword($model, $this->request);
         $model->update($this->request->all());
-        return Success::generic("Usuário Atualizado com sucesso", $model, 200);
+        return Success::generic($model, messageSuccess(20001, "Usuário"));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return bool|\Illuminate\Http\RedirectResponse|void
      */
     public function destroy($id)
     {
         $this->model->destroy($id);
-        return Success::generic("Usuário Deletado com sucesso", null, 200);
+        return Success::generic(null, messageSuccess(20002, "Usuário"));
     }
 }

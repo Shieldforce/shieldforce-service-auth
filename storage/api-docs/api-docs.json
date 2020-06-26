@@ -1,0 +1,139 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Shieldforce - Service Authorization",
+        "description": "Serviço de Autorização e Permissões",
+        "contact": {
+            "email": "alexandre.ferreira@shieldforce.com.br"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "#"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://shieldforce-service-auth.local/api/v1/",
+            "description": "Serve de Authorização e Permissões"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Atenticação"
+                ],
+                "summary": "Endpoint de Login",
+                "description": "Acesso de usuários do sistema",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "E-mail de Acesso",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "email"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Senha de Acesso",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "password"
+                        }
+                    }
+                ],
+                "responses": {
+                    "10000": {
+                        "description": "Logado com sucesso!"
+                    },
+                    "4001": {
+                        "description": "Erro de Validação de Campos"
+                    },
+                    "5005": {
+                        "description": "Não Autorizado"
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "post": {
+                "tags": [
+                    "Atenticação"
+                ],
+                "summary": "Endpoint de Informações de usuário",
+                "description": "Mostra dados do Usuário logado!",
+                "operationId": "me",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de Autorização",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso em ver dados de usuário!"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2_security_example": [
+                            "write:projects",
+                            "read:projects"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "Password Based": {
+                "type": "oauth2",
+                "description": "Use a global client_id / client_secret and your username / password combo to obtain a token",
+                "in": "header",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "/oauth/authorize",
+                        "tokenUrl": "/oauth/token",
+                        "refreshUrl": "/oauth/token/refresh",
+                        "scopes": {}
+                    }
+                },
+                "scheme": "https"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autorização e Permissões",
+            "description": "API de Autorização e Permissões",
+            "externalDocs": {
+                "description": "GitHub",
+                "url": "https://github.com/Shieldforce/shieldforce-service-auth"
+            }
+        }
+    ],
+    "externalDocs": {
+        "description": "GitHub",
+        "url": "https://github.com/Shieldforce/shieldforce-service-auth"
+    }
+}

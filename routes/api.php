@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware'=>["ACLPermissions"]], function (){
+Route::prefix('v1/')->name("v1.")->middleware(["ACLPermissions"])->group(function (){
 
     Route::group(['prefix' => "auth"], function () {
 
